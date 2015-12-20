@@ -4,7 +4,9 @@
   "description": "Api server for spendy",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.13.3"
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.3"
   },
   "devDependencies": {},
   "scripts": {
