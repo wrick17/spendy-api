@@ -24,6 +24,8 @@ db.once('open', function(){
 
 var router = express.Router();
 require('./routes/entry.js')(router);
+require('./routes/contributor.js')(router);
+require('./routes/tag.js')(router);
 app.use('/api/v1', router);
 
 var server = app.listen(process.env.PORT || config.port, function() {
