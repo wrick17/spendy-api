@@ -30,7 +30,41 @@ module.exports = function (router) {
 						var expenditure = 0.0;
 						var today = new Date();
 						var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-						Entry.find({contributorId: contributor._id, date: { $gte : firstDateOfCurrentMonth, $lte: today }}, function(err, entries){
+						Entry.find({contributorId: contributor._id}, function(err, entries){
+							async.each(entries,
+								function(entry, callback){
+									expenditure += entry.cost;
+									callback();
+								},
+								function(err){									
+									contributor.expenditure = expenditure;									
+								}
+							);							
+							callback();
+						});																																						
+					},
+					function(err){						
+						res.json(contributors);
+					}
+				);				
+			}
+		});
+	});
+
+	router.route('/contributor/betweendates')
+	//get total contribution between dates
+	.post(function(req, res){
+		Contributor.find(function(err, contributors){
+			if(err)
+				res.status(500).send(err);
+			else{				
+				async.each(contributors,
+					function(contributor, callback){
+						var expenditure = 0.0;
+						var fromDate = new Date(req.body.fromDate);
+						var toDate = new Date(req.body.toDate);
+						//var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+						Entry.find({contributorId: contributor._id, date: { $gte : fromDate, $lte: toDate }}, function(err, entries){
 							async.each(entries,
 								function(entry, callback){
 									expenditure += entry.cost;
@@ -61,7 +95,7 @@ module.exports = function (router) {
         		var expenditure = 0.0;
 				var today = new Date();
 				var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-				Entry.find({contributorId: contributor._id, date: { $gte : firstDateOfCurrentMonth, $lte: today }}, function(err, entries){
+				Entry.find({contributorId: contributor._id}, function(err, entries){
 					if(err)
 						res.status(500).send(err);
 					else{
