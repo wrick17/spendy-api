@@ -1,4 +1,6 @@
-var config = require('../config.js'),
+var async = require('async'),
+	config = require('../config.js'),
+	Entry = require('../models/entry.js'),
 	Contributor = require('../models/contributor.js');	
 
 module.exports = function (router) {
@@ -8,22 +10,44 @@ module.exports = function (router) {
 		var contributor = new Contributor();
 	    
 	    contributor.name = req.body.name;
-	    contributor.active = req.body.active;
+	    contributor.active = req.body.active;	    
 	    
 	    contributor.save(function(err, contributor){
 			if(err)
-				res.json({ message: 'Failure' });
+				res.status(500).send(err);
 			else
 				res.json({ message: 'Success' });
 		});	  	
 	})
 	//get all contributors
 	.get(function(req, res){
-		Contributor.find(function(err, contributor){
+		Contributor.find(function(err, contributors){
 			if(err)
-				res.send(err);
-			else
-				res.json(contributor);
+				res.status(500).send(err);
+			else{				
+				async.each(contributors,
+					function(contributor, callback){
+						var expenditure = 0.0;
+						var today = new Date();
+						var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+						Entry.find({contributorId: contributor._id, date: { $gte : firstDateOfCurrentMonth, $lte: today }}, function(err, entries){
+							async.each(entries,
+								function(entry, callback){
+									expenditure += entry.cost;
+									callback();
+								},
+								function(err){									
+									contributor.expenditure = expenditure;									
+								}
+							);							
+							callback();
+						});																																						
+					},
+					function(err){						
+						res.json(contributors);
+					}
+				);				
+			}
 		});
 	});
 
@@ -32,9 +56,28 @@ module.exports = function (router) {
 	.get(function(req, res) {
         Contributor.findById(req.params.id, function(err, contributor) {
             if (err)
-                res.send(err);
-            else
-            	res.json(contributor);
+                res.status(500).send(err);
+            else{
+        		var expenditure = 0.0;
+				var today = new Date();
+				var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+				Entry.find({contributorId: contributor._id, date: { $gte : firstDateOfCurrentMonth, $lte: today }}, function(err, entries){
+					if(err)
+						res.status(500).send(err);
+					else{
+						async.each(entries,
+							function(entry, callback){
+								expenditure += entry.cost;
+								callback();
+							},
+							function(err){									
+								contributor.expenditure = expenditure;									
+							}
+						);
+						res.json(contributor);
+					}
+				});            	
+            }
         });
     })
 
@@ -43,14 +86,14 @@ module.exports = function (router) {
 
     	Contributor.findById(req.params.id, function(err, contributor) {
 	    	if (err)
-	            res.send(err);
+	            res.status(500).send(err);
 	        else{
 				contributor.name = req.body.name;			    	    
 	    		contributor.active = req.body.active;
-	    		    
+
 	        	contributor.save(function(err) {
 	            if (err)
-	                res.json({ message: 'Failure' });
+	                res.status(500).send(err);
 	            else
 	            	res.json({ message: 'Success' });
 	        	});
@@ -64,7 +107,7 @@ module.exports = function (router) {
             _id: req.params.id
         }, function(err, contributor) {
             if (err)
-                res.send(err);
+                res.status(500).send(err);
             else
 	            res.json({ message: 'Success' });
         });

@@ -11,7 +11,7 @@ module.exports = function (router) {
 	    
 	    tag.save(function(err, tag){
 			if(err)
-				res.json({ message: 'Failure' });
+				res.status(500).send(err);
 			else
 				res.json({ message: 'Success' });
 		});	  	
@@ -20,7 +20,7 @@ module.exports = function (router) {
 	.get(function(req, res){
 		Tag.find(function(err, tag){
 			if(err)
-				res.send(err);
+				res.status(500).send(err);
 			else
 				res.json(tag);
 		});
@@ -31,7 +31,7 @@ module.exports = function (router) {
 	.get(function(req, res) {
         Tag.findById(req.params.id, function(err, tag) {
             if (err)
-                res.send(err);
+                res.status(500).send(err);
             else
             	res.json(tag);
         });
@@ -48,7 +48,7 @@ module.exports = function (router) {
 	        
 	        	tag.save(function(err) {
 	            if (err)
-	                res.json({ message: 'Failure' });
+	                res.status(500).send(err);
 	            else
 	            	res.json({ message: 'Success' });
 	        	});
@@ -62,7 +62,7 @@ module.exports = function (router) {
             _id: req.params.id
         }, function(err, tag) {
             if (err)
-                res.send(err);
+                res.status(500).send(err);
             else
 	            res.json({ message: 'Success' });
         });

@@ -10,14 +10,14 @@ module.exports = function (router) {
 	    
 	    //entry.id = Date.now();
 	    entry.item = req.body.item;
-	    entry.time = req.body.time;
+	    entry.date = new Date(req.body.date);
 	    entry.cost = req.body.cost;
 	    entry.contributorId = req.body.contributorId;
 	    entry.tag = req.body.tag;
 
 	    entry.save(function(err, entry){
 			if(err)
-				res.json({ message: 'Failure' });
+				res.status(500).send(err);
 			else
 				res.json({ message: 'Success' });
 		});	  	
@@ -26,7 +26,7 @@ module.exports = function (router) {
 	.get(function(req, res){
 		Entry.find(function(err, entry){
 			if(err)
-				res.send(err);
+				res.status(500).send(err);
 			else
 				res.json(entry);
 		});
@@ -37,7 +37,7 @@ module.exports = function (router) {
 	.get(function(req, res) {
         Entry.findById(req.params.id, function(err, entry) {
             if (err)
-                res.send(err);
+                res.status(500).send(err);
             else
             	res.json(entry);
         });
@@ -52,14 +52,14 @@ module.exports = function (router) {
 	        else{
 				//entry.userId = req.body.userId;
 			    entry.item = req.body.item;
-			    entry.time = req.body.time;
+			    entry.date = new Date(req.body.date);
 			    entry.cost = req.body.cost;
 			    entry.contributorId = req.body.contributorId;
 			    entry.tag = req.body.tag;			    
 	        
 	        	entry.save(function(err) {
 	            if (err)
-	                res.json({ message: 'Failure' });
+	                res.status(500).send(err);
 	            else
 	            	res.json({ message: 'Success' });
 	        	});
@@ -73,7 +73,7 @@ module.exports = function (router) {
             _id: req.params.id
         }, function(err, entry) {
             if (err)
-                res.send(err);
+                res.status(500).send(err);
             else
 	            res.json({ message: 'Success' });
         });
