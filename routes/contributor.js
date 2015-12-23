@@ -18,7 +18,7 @@ module.exports = function (router) {
 			else
 				res.json({ message: 'Success' });
 		});	  	
-	})
+	})	
 	
 	//get total contribution between dates
 	.get(function(req, res){
@@ -29,6 +29,8 @@ module.exports = function (router) {
 				async.each(contributors,
 					function(contributor, callback){
 						var expenditure = 0.0;
+						console.log("ji");
+						console.log(req.query.fromDate + " " + req.query.toDate);
 						if(req.query.fromDate && req.query.toDate){
 							var fromDate = new Date(req.query.fromDate);
 							var toDate = new Date(req.query.toDate);
@@ -41,8 +43,7 @@ module.exports = function (router) {
 						} else if(!req.query.fromDate){
 							var fromDate = new Date(-8640000000000000);//Tue Apr 20 -271821
 							var toDate = new Date(req.query.toDate);
-						}
-						
+						}						
 						//var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 						Entry.find({contributorId: contributor._id, date: { $gte : fromDate, $lte: toDate }}, function(err, entries){
 							async.each(entries,
