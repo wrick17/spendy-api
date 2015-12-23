@@ -19,7 +19,8 @@ module.exports = function (router) {
 				res.json({ message: 'Success' });
 		});	  	
 	})
-	//get all contributors
+	
+	//get total contribution between dates
 	.get(function(req, res){
 		Contributor.find(function(err, contributors){
 			if(err)
@@ -28,41 +29,20 @@ module.exports = function (router) {
 				async.each(contributors,
 					function(contributor, callback){
 						var expenditure = 0.0;
-						var today = new Date();
-						var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-						Entry.find({contributorId: contributor._id}, function(err, entries){
-							async.each(entries,
-								function(entry, callback){
-									expenditure += entry.cost;
-									callback();
-								},
-								function(err){									
-									contributor.expenditure = expenditure;									
-								}
-							);							
-							callback();
-						});																																						
-					},
-					function(err){						
-						res.json(contributors);
-					}
-				);				
-			}
-		});
-	});
-
-	router.route('/contributor/betweendates')
-	//get total contribution between dates
-	.post(function(req, res){
-		Contributor.find(function(err, contributors){
-			if(err)
-				res.status(500).send(err);
-			else{				
-				async.each(contributors,
-					function(contributor, callback){
-						var expenditure = 0.0;
-						var fromDate = new Date(req.body.fromDate);
-						var toDate = new Date(req.body.toDate);
+						if(req.query.fromDate && req.query.toDate){
+							var fromDate = new Date(req.query.fromDate);
+							var toDate = new Date(req.query.toDate);
+						} else if(!req.query.fromDate && !req.query.toDate){
+							var fromDate = new Date(-8640000000000000);
+							var toDate = new Date();
+						} else if(!req.query.toDate){
+							var toDate = new Date();
+							var fromDate = new Date(req.query.fromDate);
+						} else if(!req.query.fromDate){
+							var fromDate = new Date(-8640000000000000);//Tue Apr 20 -271821
+							var toDate = new Date(req.query.toDate);
+						}
+						
 						//var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 						Entry.find({contributorId: contributor._id, date: { $gte : fromDate, $lte: toDate }}, function(err, entries){
 							async.each(entries,
@@ -92,7 +72,7 @@ module.exports = function (router) {
             if (err)
                 res.status(500).send(err);
             else{
-        		var expenditure = 0.0;
+            	var expenditure = 0.0;
 				var today = new Date();
 				var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 				Entry.find({contributorId: contributor._id}, function(err, entries){
