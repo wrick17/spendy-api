@@ -28,9 +28,7 @@ module.exports = function (router) {
 			else{				
 				async.each(contributors,
 					function(contributor, callback){
-						var expenditure = 0.0;
-						console.log("ji");
-						console.log(req.query.fromDate + " " + req.query.toDate);
+						var expenditure = 0.0;						
 						if(req.query.fromDate && req.query.toDate){
 							var fromDate = new Date(req.query.fromDate);
 							var toDate = new Date(req.query.toDate);
