@@ -2,9 +2,12 @@
   "name": "spendy-api",
   "version": "1.0.0",
   "description": "Api server for spendy",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
-    "express": "^4.13.3"
+    "async": "^1.5.0",
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.3"
   },
   "devDependencies": {},
   "scripts": {
