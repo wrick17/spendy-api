@@ -13,7 +13,7 @@ module.exports = function (router) {
 	    entry.date = new Date(req.body.date);
 	    entry.cost = req.body.cost;
 	    entry.contributorId = req.body.contributorId;
-	    entry.tag = req.body.tag;
+	    entry.tagId = req.body.tagId;
 
 	    entry.save(function(err, entry){
 			if(err)
@@ -55,7 +55,7 @@ module.exports = function (router) {
 			    entry.date = new Date(req.body.date);
 			    entry.cost = req.body.cost;
 			    entry.contributorId = req.body.contributorId;
-			    entry.tag = req.body.tag;			    
+			    entry.tagId = req.body.tagId;			    
 	        
 	        	entry.save(function(err) {
 	            if (err)
