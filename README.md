@@ -176,7 +176,8 @@ Request URL:
 Body:
 
     {
-    	"name": "Groceries"
+    	"name": "Groceries",
+    	"active": true
 	}
 Response Status:
 
