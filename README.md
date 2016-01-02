@@ -332,6 +332,11 @@ Request URL:
 >/entry
 
 
+Optional query parameters: 
+
+* fromDate (datatype: date, format: javascript compatible date),
+* toDate (datatype: date, format: javascript compatible date).
+
 
 Response Status:
 
