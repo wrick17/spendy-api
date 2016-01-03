@@ -45,11 +45,13 @@ module.exports = function (router) {
 							var fromDate = new Date(-8640000000000000);//Tue Apr 20 -271821
 							var toDate = new Date(req.query.toDate);
 						}						
-						//var firstDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+						
 						Entry.find({contributorId: contributor._id, date: { $gte : fromDate, $lte: toDate }}, function(err, entries){
+							
 							async.each(entries,
 								function(entry, callback){
 									expenditure += entry.cost;
+									contributor.isDeletable = false;
 									callback();
 								},
 								function(err){									
@@ -84,6 +86,7 @@ module.exports = function (router) {
 						async.each(entries,
 							function(entry, callback){
 								expenditure += entry.cost;
+								contributor.isDeletable = false;
 								callback();
 							},
 							function(err){									
@@ -108,8 +111,11 @@ module.exports = function (router) {
 	    		contributor.active = req.body.active;
 
 	        	contributor.save(function(err) {
-	            if (err)
-	                res.status(500).send(err);
+	            if(err)
+					if(err.code === 11000)
+						res.status(403).json({message: config.DUPLICATE_NOT_ALLOWED});
+					else
+						res.status(500).send(err);
 	            else
 	            	res.json({ message: config.SUCCESS_MSG });
 	        	});
