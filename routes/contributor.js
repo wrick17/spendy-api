@@ -14,9 +14,12 @@ module.exports = function (router) {
 	    
 	    contributor.save(function(err, contributor){
 			if(err)
-				res.status(500).send(err);
+				if(err.code === 11000)
+					res.status(403).json({message: config.DUPLICATE_NOT_ALLOWED});
+				else
+					res.status(500).send(err);
 			else
-				res.json({ message: 'Success' });
+				res.json({ message: config.SUCCESS_MSG });
 		});	  	
 	})	
 	
@@ -108,7 +111,7 @@ module.exports = function (router) {
 	            if (err)
 	                res.status(500).send(err);
 	            else
-	            	res.json({ message: 'Success' });
+	            	res.json({ message: config.SUCCESS_MSG });
 	        	});
 	        }	        
 		});
@@ -122,7 +125,7 @@ module.exports = function (router) {
             if (err)
                 res.status(500).send(err);
             else
-	            res.json({ message: 'Success' });
+	            res.json({ message: config.SUCCESS_MSG });
         });
     });
 }

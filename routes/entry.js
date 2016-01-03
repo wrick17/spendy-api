@@ -19,7 +19,7 @@ module.exports = function (router) {
 			if(err)
 				res.status(500).send(err);
 			else
-				res.json({ message: 'Success' });
+				res.json({ message: config.SUCCESS_MSG });
 		});	  	
 	})
 	//get all entries
@@ -74,7 +74,7 @@ module.exports = function (router) {
 	            if (err)
 	                res.status(500).send(err);
 	            else
-	            	res.json({ message: 'Success' });
+	            	res.json({ message: config.SUCCESS_MSG });
 	        	});
 	        }	        
 		});
@@ -88,7 +88,7 @@ module.exports = function (router) {
             if (err)
                 res.status(500).send(err);
             else
-	            res.json({ message: 'Success' });
+	            res.json({ message: config.SUCCESS_MSG });
         });
     });
 }
