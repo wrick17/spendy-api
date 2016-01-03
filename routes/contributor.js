@@ -111,8 +111,11 @@ module.exports = function (router) {
 	    		contributor.active = req.body.active;
 
 	        	contributor.save(function(err) {
-	            if (err)
-	                res.status(500).send(err);
+	            if(err)
+					if(err.code === 11000)
+						res.status(403).json({message: config.DUPLICATE_NOT_ALLOWED});
+					else
+						res.status(500).send(err);
 	            else
 	            	res.json({ message: config.SUCCESS_MSG });
 	        	});

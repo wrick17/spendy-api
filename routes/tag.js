@@ -69,8 +69,11 @@ module.exports = function (router) {
 				tag.name = req.body.name;			    	    
 	        	tag.active = req.body.active;
 	        	tag.save(function(err) {
-	            if (err)
-	                res.status(500).send(err);
+	            if(err)
+					if(err.code === 11000)
+						res.status(403).json({message: config.DUPLICATE_NOT_ALLOWED});
+					else
+						res.status(500).send(err);
 	            else
 	            	res.json({ message: config.SUCCESS_MSG });
 	        	});
