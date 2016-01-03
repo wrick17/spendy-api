@@ -8,7 +8,7 @@ module.exports = function (router) {
 		var tag = new Tag();
 	    
 	    tag.name = req.body.name;
-	    
+	    tag.active = req.body.active;
 	    tag.save(function(err, tag){
 			if(err)
 				if(err.code === 11000)
@@ -48,7 +48,7 @@ module.exports = function (router) {
 	            res.send(err);
 	        else{
 				tag.name = req.body.name;			    	    
-	        
+	        		tag.active = req.body.active;
 	        	tag.save(function(err) {
 	            if (err)
 	                res.status(500).send(err);
