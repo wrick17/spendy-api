@@ -1,4 +1,6 @@
 var config = require('../config.js'),
+	async = require('async'),
+	Entry = require('../models/entry.js'),
 	Tag = require('../models/tag.js');	
 
 module.exports = function (router) {
@@ -21,11 +23,23 @@ module.exports = function (router) {
 	})
 	//get all tags
 	.get(function(req, res){
-		Tag.find(function(err, tag){
+		Tag.find(function(err, tags){
 			if(err)
 				res.status(500).send(err);
-			else
-				res.json(tag);
+			else{
+				async.each(tags,
+					function(tag, callback){										
+						Entry.findOne({tagId: tag._id}, function(err, entry){
+							if(entry !== null)
+								tag.isDeletable = false;							
+							callback();
+						});																																				
+					},
+					function(err){						
+						res.json(tags);
+					}
+				);				
+			}
 		});
 	});
 
@@ -35,8 +49,13 @@ module.exports = function (router) {
         Tag.findById(req.params.id, function(err, tag) {
             if (err)
                 res.status(500).send(err);
-            else
-            	res.json(tag);
+            else{
+            	Entry.findOne({tagId: tag._id}, function(err, entry){
+            		if(entry !== null)
+						tag.isDeletable = false;
+					res.json(tag);
+				});            	
+            }
         });
     })
 
@@ -48,7 +67,7 @@ module.exports = function (router) {
 	            res.send(err);
 	        else{
 				tag.name = req.body.name;			    	    
-	        		tag.active = req.body.active;
+	        	tag.active = req.body.active;
 	        	tag.save(function(err) {
 	            if (err)
 	                res.status(500).send(err);
