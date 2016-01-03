@@ -73,6 +73,7 @@ Body:
 		    "_id": "567adb29c2e84d98191b996d",
 		    "name": "Utsav",
 		    "__v": 0,
+		    "isDeletable": false,
 		    "expenditure": 28,
 		    "active": true
 	  	},
@@ -80,6 +81,7 @@ Body:
 		    "_id": "567adf0015f1541c113073b5",
 		    "name": "Pratyush",
 		    "__v": 0,
+		    "isDeletable": true,
 		    "expenditure": 0,
 		    "active": true
 	  	}
@@ -105,6 +107,7 @@ Body:
   		"_id": "567adb29c2e84d98191b996d",
   		"name": "Utsav",
   		"__v": 0,
+  		"isDeletable": false,
   		"expenditure": 28,
   		"active": true
 	}
@@ -211,10 +214,14 @@ Body:
 	  	{
 		    "_id": "567adb29c2e84d98191b996d",
 		    "name": "Groceries"
+		    "isDeletable": false,
+		    "active": true
 	  	},
 	  	{
 		    "_id": "567adf0015f1541c113073b5",
-		    "name": "Vegetables"
+		    "name": "Vegetables".
+		    "isDeletable": true,
+		    "active": true
 	  	}
 	]
 
@@ -236,7 +243,9 @@ Body:
 
 	{
   		"_id": "567adb29c2e84d98191b996d",
-  		"name": "Groceries"
+  		"name": "Groceries".
+  		"isDeletable": false,
+		"active": true
 	}
 
 ---
