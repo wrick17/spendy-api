@@ -360,7 +360,9 @@ Body:
             "cost": "28",
             "date": "2015-12-21",
             "contributorId": "567adf0015f1541c113073b5",
-            "tagId": "567adb29c2e84d98191b996d"
+            "contributorName": "Utsav",
+            "tagId": "567adb29c2e84d98191b996d",
+            "tagName": "Groceries"
         }
 	]
 
@@ -386,7 +388,9 @@ Body:
         "cost": "28",
         "date": "2015-12-21",
         "contributorId": "567adf0015f1541c113073b5",
-        "tagId": "567adb29c2e84d98191b996d"
+        "contributorName": "Utsav",
+        "tagId": "567adb29c2e84d98191b996d",
+        "tagName": "Groceries"
 	}
 
 ---

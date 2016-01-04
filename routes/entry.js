@@ -1,6 +1,8 @@
 var config = require('../config.js'),
 	Entry = require('../models/entry.js'),
-	Contributor = require('../models/contributor.js');	
+	async = require('async'),
+	Tag = require('../models/tag.js'),
+	Contributor = require('../models/contributor.js');
 
 module.exports = function (router) {
 	router.route('/entry')
@@ -37,11 +39,33 @@ module.exports = function (router) {
 			var fromDate = new Date(-8640000000000000);//Tue Apr 20 -271821
 			var toDate = new Date(req.query.toDate);
 		}
-		Entry.find({date: { $gte : fromDate, $lte: toDate }}, function(err, entry){
+		Entry.find({date: { $gte : fromDate, $lte: toDate }}, function(err, entries){
 			if(err)
 				res.status(500).send(err);
-			else
-				res.json(entry);
+			else{
+				entries = JSON.parse(JSON.stringify(entries));
+				async.each(entries, function(entry, callback){
+					async.series([
+						function(callback){
+							Contributor.findById(entry.contributorId, function(err, contributor){
+								entry.contributorName = contributor.name;																
+								callback();
+							});
+						},
+						function(callback){
+							Tag.findById(entry.tagId, function(err, tag){								
+								entry.tagName = tag.name;								
+								callback();
+							});
+						},
+						function(err){							
+							callback();
+						}
+					]);									
+				}, function(err){					
+					res.json(entries);
+				});				
+			}
 		});
 	});
 
@@ -51,8 +75,26 @@ module.exports = function (router) {
         Entry.findById(req.params.id, function(err, entry) {
             if (err)
                 res.status(500).send(err);
-            else
-            	res.json(entry);
+            else{
+            	entry = JSON.parse(JSON.stringify(entry));
+            	async.series([
+					function(callback){
+						Contributor.findById(entry.contributorId, function(err, contributor){
+							entry.contributorName = contributor.name;																
+							callback();
+						});
+					},
+					function(callback){
+						Tag.findById(entry.tagId, function(err, tag){								
+							entry.tagName = tag.name;								
+							callback();
+						});
+					},
+					function(err){													
+						res.json(entry);
+					}
+				]);            	
+            }
         });
     })
 
