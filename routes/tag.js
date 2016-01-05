@@ -8,9 +8,10 @@ module.exports = function (router) {
 	//create a tag
 	.post(function (req, res) {
 		var tag = new Tag();
-	    
-	    tag.name = req.body.name;
+	    var tagName = req.body.name;
+	    tag.name = tagName.charAt(0).toUpperCase() + tagName.slice(1);	    
 	    tag.active = req.body.active;
+	    
 	    tag.save(function(err, tag){
 			if(err)
 				if(err.code === 11000)
@@ -66,8 +67,10 @@ module.exports = function (router) {
 	    	if (err)
 	            res.send(err);
 	        else{
-				tag.name = req.body.name;			    	    
+				var tagName = req.body.name;
+	    		tag.name = tagName.charAt(0).toUpperCase() + tagName.slice(1);	  			    	    
 	        	tag.active = req.body.active;
+	        	
 	        	tag.save(function(err) {
 	            if(err)
 					if(err.code === 11000)
