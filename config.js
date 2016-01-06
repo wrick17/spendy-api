@@ -1,5 +1,5 @@
 module.exports = {
-    'database': 'mongodb://utsavdawn:utsav12@ds033915.mongolab.com:33915/spendy',
+    'database': 'mongodb://utsavdawn:utsav12@ds039165.mongolab.com:39165/spendy-dev',
     'port': 3000,
     'SUCCESS_MSG': "Success",    
     'FAILURE_MSG': "Failure",
