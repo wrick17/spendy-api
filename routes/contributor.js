@@ -8,7 +8,7 @@ module.exports = function (router) {
 	//create a contributor
 	.post(function (req, res) {
 		var contributor = new Contributor();
-	    var contributorName = req.body.name;
+	    var contributorName = req.body.name.toLowerCase();
 	    contributor.name = contributorName.charAt(0).toUpperCase() + contributorName.slice(1);
 	    contributor.active = req.body.active;	    
 	    
@@ -107,7 +107,7 @@ module.exports = function (router) {
 	    	if (err)
 	            res.status(500).send(err);
 	        else{
-	        	var contributorName = req.body.name;
+	        	var contributorName = req.body.name.toLowerCase();
 	    		contributor.name = contributorName.charAt(0).toUpperCase() + contributorName.slice(1);				    	    
 	    		contributor.active = req.body.active;
 
